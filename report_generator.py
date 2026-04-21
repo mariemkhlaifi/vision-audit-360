@@ -1,315 +1,116 @@
 
 
-import re
+from fpdf import FPDF
 from datetime import datetime
-from pathlib import Path
+import unicodedata
+import re
 
-from reportlab.lib.pagesizes import A4
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.units import cm
-from reportlab.lib import colors
-from reportlab.platypus import (
-    SimpleDocTemplate, Paragraph, Spacer,
-    HRFlowable, Table, TableStyle
-)
-from reportlab.platypus.flowables import KeepTogether
+def normalize_text(text: str) -> str:
+    """Supprime les accents et caractères spéciaux"""
+    if not text:
+        return ""
+    text = unicodedata.normalize('NFKD', text)
+    text = text.encode('ASCII', 'ignore').decode('ASCII')
+    text = re.sub(r'[^\x00-\x7F]+', '', text)
+    return text.strip()
 
+class AuditPDF(FPDF):
+    def header(self):
+        self.set_font("Helvetica", "B", 16)
+        self.cell(0, 10, "Vision-Audit 360 - Rapport d'Audit Qualite", ln=True, align="C")
+        self.set_font("Helvetica", "", 10)
+        self.cell(0, 6, f"Genere le {datetime.now().strftime('%d/%m/%Y a %H:%M')}", ln=True, align="C")
+        self.ln(10)
 
-# ---------------------------------------------------------------------------
-# Helpers
-# ---------------------------------------------------------------------------
+    def footer(self):
+        self.set_y(-15)
+        self.set_font("Helvetica", "I", 8)
+        self.cell(0, 10, f"Page {self.page_no()}", align="C")
 
-def _strip_emojis(text: str) -> str:
-    """Supprime les emojis et caractères non imprimables."""
-    emoji_pattern = re.compile(
-        "["
-        "\U0001F600-\U0001F64F"
-        "\U0001F300-\U0001F5FF"
-        "\U0001F680-\U0001F6FF"
-        "\U0001F1E0-\U0001F1FF"
-        "\U00002700-\U000027BF"
-        "\U0001F900-\U0001F9FF"
-        "\U00002500-\U00002BEF"
-        "\U0001FA00-\U0001FA6F"
-        "\U0001FA70-\U0001FAFF"
-        "\u2600-\u26FF"
-        "\u2B50-\u2B55"
-        "]+",
-        flags=re.UNICODE,
-    )
-    return emoji_pattern.sub("", text).strip()
+def generate_audit_report(result: dict, constat_text: str) -> str:
+    """Génère un rapport PDF professionnel"""
+    pdf = AuditPDF()
+    pdf.add_page()
+    pdf.set_auto_page_break(auto=True, margin=15)
 
+    # Nettoyage des textes
+    constat_text_clean = normalize_text(constat_text)
+    diagnostic_clean = normalize_text(result.get("diagnostic", "Non disponible"))
+    recommandations_clean = normalize_text(result.get("recommandations", "Aucune recommandation supplementaire"))
+    
+    # Priorité sans emoji
+    priorite_brute = result.get("priorite_action", "Non defini")
+    priorite_clean = re.sub(r'[🔴🟠🟢]', '', priorite_brute).strip()
+    
+    # Titre du constat
+    pdf.set_font("Helvetica", "B", 14)
+    pdf.cell(0, 10, "Constat terrain", ln=True)
+    pdf.set_font("Helvetica", "", 11)
+    pdf.multi_cell(0, 6, constat_text_clean)
+    pdf.ln(8)
 
-def _safe(text) -> str:
-    """Garantit une chaîne propre (pas None, pas d'emojis)."""
-    return _strip_emojis(str(text)) if text else ""
+    # Diagnostic
+    pdf.set_font("Helvetica", "B", 14)
+    pdf.cell(0, 10, "Diagnostic de conformite", ln=True)
+    pdf.set_font("Helvetica", "", 11)
+    pdf.multi_cell(0, 6, diagnostic_clean)
+    pdf.ln(8)
 
-
-# ---------------------------------------------------------------------------
-# Style sheet
-# ---------------------------------------------------------------------------
-
-def _build_styles():
-    base = getSampleStyleSheet()
-
-    title_style = ParagraphStyle(
-        "ReportTitle",
-        parent=base["Title"],
-        fontSize=18,
-        textColor=colors.HexColor("#1a3c6e"),
-        spaceAfter=4,
-    )
-
-    subtitle_style = ParagraphStyle(
-        "ReportSubtitle",
-        parent=base["Normal"],
-        fontSize=10,
-        textColor=colors.HexColor("#555555"),
-        spaceAfter=12,
-        alignment=1,  # centre
-    )
-
-    section_style = ParagraphStyle(
-        "SectionHeader",
-        parent=base["Heading2"],
-        fontSize=12,
-        textColor=colors.HexColor("#1a3c6e"),
-        borderPad=4,
-        spaceBefore=14,
-        spaceAfter=4,
-        leading=16,
-    )
-
-    body_style = ParagraphStyle(
-        "ReportBody",
-        parent=base["Normal"],
-        fontSize=10,
-        leading=14,
-        spaceAfter=4,
-    )
-
-    item_style = ParagraphStyle(
-        "ReportItem",
-        parent=body_style,
-        leftIndent=12,
-        spaceAfter=3,
-    )
-
-    highlight_style = ParagraphStyle(
-        "Highlight",
-        parent=body_style,
-        fontName="Helvetica-Bold",
-        fontSize=11,
-    )
-
-    return {
-        "title": title_style,
-        "subtitle": subtitle_style,
-        "section": section_style,
-        "body": body_style,
-        "item": item_style,
-        "highlight": highlight_style,
-    }
-
-
-# ---------------------------------------------------------------------------
-# Score badge (table colorée)
-# ---------------------------------------------------------------------------
-
-def _score_badge(score: int, styles: dict):
-    """Retourne un petit tableau coloré affichant le score de conformité."""
-    if score >= 75:
-        bg = colors.HexColor("#d4edda")
-        fg = colors.HexColor("#155724")
-        label = "Conforme"
-    elif score >= 50:
-        bg = colors.HexColor("#fff3cd")
-        fg = colors.HexColor("#856404")
-        label = "Partiellement conforme"
-    else:
-        bg = colors.HexColor("#f8d7da")
-        fg = colors.HexColor("#721c24")
-        label = "Non conforme"
-
-    data = [[f"Score de conformité : {score}%", label]]
-    tbl = Table(data, colWidths=[10 * cm, 6 * cm])
-    tbl.setStyle(TableStyle([
-        ("BACKGROUND", (0, 0), (-1, -1), bg),
-        ("TEXTCOLOR", (0, 0), (-1, -1), fg),
-        ("FONTNAME", (0, 0), (-1, -1), "Helvetica-Bold"),
-        ("FONTSIZE", (0, 0), (-1, -1), 11),
-        ("ALIGN", (0, 0), (0, 0), "LEFT"),
-        ("ALIGN", (1, 0), (1, 0), "RIGHT"),
-        ("TOPPADDING", (0, 0), (-1, -1), 8),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 8),
-        ("LEFTPADDING", (0, 0), (-1, -1), 10),
-        ("RIGHTPADDING", (0, 0), (-1, -1), 10),
-        ("ROUNDEDCORNERS", [5, 5, 5, 5]),
-    ]))
-    return tbl
-
-
-# ---------------------------------------------------------------------------
-# Fonction principale
-# ---------------------------------------------------------------------------
-
-def generate_audit_report(result: dict, constat_text: str, output_dir: str = ".") -> str:
-    """
-    Génère un rapport PDF professionnel Vision-Audit 360.
-
-    Paramètres
-    ----------
-    result       : dict issu de l'analyse IA (diagnostic, score, actions…)
-    constat_text : description textuelle du constat terrain
-    output_dir   : dossier de sortie (défaut : répertoire courant)
-
-    Retour
-    ------
-    Chemin absolu du fichier PDF généré.
-    """
-    # -- Préparation du chemin de sortie ------------------------------------
-    output_path = Path(output_dir)
-    output_path.mkdir(parents=True, exist_ok=True)
-    filename = output_path / f"rapport_audit_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
-
-    # -- Initialisation du document -----------------------------------------
-    doc = SimpleDocTemplate(
-        str(filename),
-        pagesize=A4,
-        leftMargin=2.5 * cm,
-        rightMargin=2.5 * cm,
-        topMargin=2.5 * cm,
-        bottomMargin=2.5 * cm,
-        title="Vision-Audit 360 – Rapport d'Audit Qualité",
-        author="Vision-Audit 360",
-    )
-
-    styles = _build_styles()
-    story = []
-
-    # -- En-tête du rapport -------------------------------------------------
-    story.append(Paragraph("Vision-Audit 360", styles["title"]))
-    story.append(Paragraph("Rapport d'Audit Qualité – ISO 9001", styles["title"]))
-    story.append(Paragraph(
-        f"Généré le {datetime.now().strftime('%d/%m/%Y à %H:%M')}",
-        styles["subtitle"],
-    ))
-    story.append(HRFlowable(width="100%", thickness=2, color=colors.HexColor("#1a3c6e")))
-    story.append(Spacer(1, 0.4 * cm))
-
-    # -- Section 1 : Constat terrain ----------------------------------------
-    story.append(Paragraph("1. Constat terrain", styles["section"]))
-    story.append(Paragraph(_safe(constat_text) or "Aucun constat fourni.", styles["body"]))
-    story.append(Spacer(1, 0.3 * cm))
-
-    # -- Section 2 : Diagnostic ---------------------------------------------
-    story.append(Paragraph("2. Diagnostic de conformité", styles["section"]))
-    diagnostic = _safe(result.get("diagnostic", "Non disponible."))
-    story.append(Paragraph(diagnostic, styles["body"]))
-    story.append(Spacer(1, 0.3 * cm))
-
-    # -- Section 3 : Clauses ISO 9001 ---------------------------------------
-    story.append(Paragraph("3. Clauses ISO 9001 concernées", styles["section"]))
+    # Clauses ISO
+    pdf.set_font("Helvetica", "B", 14)
+    pdf.cell(0, 10, "Clauses ISO 9001 concernees", ln=True)
+    pdf.set_font("Helvetica", "", 11)
     clauses = result.get("clauses_concernees", [])
     if clauses:
-        for clause in clauses:
-            story.append(Paragraph(f"• {_safe(clause)}", styles["item"]))
+        clauses_clean = [normalize_text(c) for c in clauses]
+        pdf.multi_cell(0, 6, " - " + "\n - ".join(clauses_clean))
     else:
-        story.append(Paragraph("Aucune clause identifiée.", styles["body"]))
-    story.append(Spacer(1, 0.3 * cm))
+        pdf.cell(0, 6, "Aucune clause identifiee", ln=True)
+    pdf.ln(8)
 
-    # -- Section 4 : Niveau de risque ---------------------------------------
-    story.append(Paragraph("4. Niveau de risque", styles["section"]))
-    risque = _safe(result.get("niveau_risque", "Non défini"))
-    story.append(Paragraph(f"→ {risque}", styles["highlight"]))
-    story.append(Spacer(1, 0.3 * cm))
+    # Niveau de risque
+    pdf.set_font("Helvetica", "B", 14)
+    pdf.cell(0, 10, "Niveau de risque", ln=True)
+    pdf.set_font("Helvetica", "", 11)
+    pdf.cell(0, 6, f"-> {normalize_text(result.get('niveau_risque', 'Non defini'))}", ln=True)
+    pdf.ln(8)
 
-    # -- Section 5 : Score de conformité ------------------------------------
-    story.append(Paragraph("5. Score de conformité", styles["section"]))
+    # Score de conformité
+    pdf.set_font("Helvetica", "B", 14)
+    pdf.cell(0, 10, "Score de conformite", ln=True)
+    pdf.set_font("Helvetica", "", 11)
     score = result.get("conformite_score", 0)
-    try:
-        score = int(score)
-    except (ValueError, TypeError):
-        score = 0
-    story.append(_score_badge(score, styles))
-    story.append(Spacer(1, 0.4 * cm))
+    pdf.cell(0, 6, f"-> {score}%", ln=True)
+    pdf.ln(5)
 
-    # -- Section 6 : Priorité d'action --------------------------------------
-    story.append(Paragraph("6. Priorité d'action", styles["section"]))
-    priorite = _safe(result.get("priorite_action", "Non défini"))
-    delai = _safe(result.get("delai_recommandation", "Non défini"))
-    story.append(Paragraph(
-        f"→ Priorité : <b>{priorite}</b> — Délai recommandé : <b>{delai}</b>",
-        styles["body"],
-    ))
-    story.append(Spacer(1, 0.3 * cm))
+    # Priorité d'action
+    pdf.set_font("Helvetica", "B", 14)
+    pdf.cell(0, 10, "Priorite d'action", ln=True)
+    pdf.set_font("Helvetica", "", 11)
+    delai = normalize_text(result.get("delai_recommandation", "Non defini"))
+    pdf.cell(0, 6, f"-> {priorite_clean} (delai recommande : {delai})", ln=True)
+    pdf.ln(8)
 
-    # -- Section 7 : Actions correctives ------------------------------------
-    story.append(Paragraph("7. Actions correctives proposées", styles["section"]))
+    # Actions correctives
+    pdf.set_font("Helvetica", "B", 14)
+    pdf.cell(0, 10, "Actions correctives proposees", ln=True)
+    pdf.set_font("Helvetica", "", 11)
     actions = result.get("actions_correctives", [])
     if actions:
         for i, action in enumerate(actions, 1):
-            story.append(Paragraph(f"{i}. {_safe(action)}", styles["item"]))
+            action_clean = normalize_text(action)
+            pdf.multi_cell(0, 6, f"{i}. {action_clean}")
     else:
-        story.append(Paragraph("Aucune action corrective proposée.", styles["body"]))
-    story.append(Spacer(1, 0.3 * cm))
+        pdf.cell(0, 6, "Aucune action corrective proposee", ln=True)
+    pdf.ln(8)
 
-    # -- Section 8 : Recommandations supplémentaires ------------------------
-    story.append(Paragraph("8. Recommandations supplémentaires", styles["section"]))
-    reco = _safe(result.get("recommandations", "Aucune recommandation supplémentaire."))
-    story.append(Paragraph(reco, styles["body"]))
-
-    # -- Pied de page (numéro de page via onPage) ---------------------------
-    def _add_page_number(canvas, doc):
-        canvas.saveState()
-        canvas.setFont("Helvetica", 8)
-        canvas.setFillColor(colors.HexColor("#888888"))
-        page_num = canvas.getPageNumber()
-        canvas.drawCentredString(A4[0] / 2, 1 * cm, f"Page {page_num}")
-        canvas.restoreState()
-
-    # -- Génération ---------------------------------------------------------
-    doc.build(story, onFirstPage=_add_page_number, onLaterPages=_add_page_number)
-
-    return str(filename.resolve())
-
-
-# ---------------------------------------------------------------------------
-# Test rapide (python report_generator.py)
-# ---------------------------------------------------------------------------
-if __name__ == "__main__":
-    sample_result = {
-        "diagnostic": (
-            "Le processus de contrôle qualité présente des lacunes importantes. "
-            "Les enregistrements de mesure ne sont pas systématiquement archivés, "
-            "ce qui compromet la traçabilité exigée par la norme."
-        ),
-        "clauses_concernees": [
-            "7.1.5 – Ressources pour la surveillance et la mesure",
-            "8.5.2 – Identification et traçabilité",
-            "9.1.1 – Surveillance, mesure, analyse et évaluation",
-        ],
-        "niveau_risque": "Élevé 🔴",
-        "conformite_score": 42,
-        "priorite_action": "Urgente",
-        "delai_recommandation": "Sous 30 jours",
-        "actions_correctives": [
-            "Mettre en place un registre numérique d'archivage des mesures.",
-            "Former les opérateurs aux exigences de traçabilité ISO 9001.",
-            "Réaliser un audit interne ciblé sur la clause 7.1.5 sous 15 jours.",
-        ],
-        "recommandations": (
-            "Il est conseillé de réviser la procédure de contrôle qualité dans son ensemble "
-            "et de planifier une revue de direction pour valider les corrections apportées."
-        ),
-    }
-
-    constat = (
-        "Lors de la visite du site de production, il a été constaté que les instruments "
-        "de mesure (pieds à coulisse, micromètres) ne font pas l'objet d'un étalonnage "
-        "documenté. Les opérateurs ne disposent pas de procédure écrite pour enregistrer "
-        "les résultats de contrôle en cours de fabrication."
-    )
-
-    path = generate_audit_report(sample_result, constat, output_dir=".")
-    print(f"✅ Rapport généré : {path}")
+    # Recommandations
+    pdf.set_font("Helvetica", "B", 14)
+    pdf.cell(0, 10, "Recommandations supplementaires", ln=True)
+    pdf.set_font("Helvetica", "", 11)
+    pdf.multi_cell(0, 6, recommandations_clean)
+    
+    # Sauvegarde
+    filename = f"rapport_audit_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
+    pdf.output(filename)
+    return filename
