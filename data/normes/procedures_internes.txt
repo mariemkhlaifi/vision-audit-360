@@ -1,0 +1,113 @@
+=== PROCÉDURES INTERNES SIMULÉES ===
+=== Référentiel : ISO 9001:2015 ===
+
+--- P-01 : CONTRÔLE DES ÉQUIPEMENTS DE MESURE ---
+Objectif : Garantir la fiabilité des mesures
+Exigences :
+  - Tout équipement de mesure doit porter une étiquette de calibrage valide
+  - La date du prochain calibrage doit être visible
+  - Les équipements hors calibrage doivent être identifiés et retirés
+Non-conformité : Absence d'étiquette, étiquette expirée, équipement non tracé
+Action corrective : Calibrer immédiatement, mettre en place un planning
+
+--- P-02 : GESTION DES NON-CONFORMITÉS ---
+Objectif : Traiter et documenter tous les écarts qualité
+Exigences :
+  - Toute non-conformité doit être enregistrée dans le registre NC
+  - L'enregistrement doit inclure : photo, description, date, responsable
+  - Une analyse des causes doit être réalisée sous 48h
+  - Une action corrective doit être planifiée et suivie
+Non-conformité : Absence d'enregistrement, registre non à jour
+Action corrective : Former le personnel, désigner un responsable
+
+--- P-03 : SÉCURITÉ DES INFRASTRUCTURES ---
+Objectif : Maintenir un environnement de travail sûr
+Exigences :
+  - Les armoires électriques doivent rester fermées et verrouillées
+  - Les panneaux d'avertissement doivent être visibles et lisibles
+  - Un registre des vérifications électriques doit être tenu à jour
+  - Les câbles doivent être étiquetés et organisés
+Non-conformité : Armoire ouverte, absence de signalétique, registre non à jour
+Action corrective : Fermeture immédiate, étiquetage, mise à jour du registre
+
+--- P-04 : PROPRETÉ ET ENVIRONNEMENT ---
+Objectif : Maintenir un environnement de travail propre et organisé
+Exigences :
+  - Nettoyage quotidien des ateliers après chaque équipe
+  - Les postes de travail doivent être rangés et dégagés
+  - Les zones de circulation doivent être libres
+  - Vérification hebdomadaire des armoires et équipements
+Non-conformité : Poussière excessive, zone encombrée, poste non rangé
+Action corrective : Nettoyage immédiat, planification des vérifications
+
+--- P-05 : IDENTIFICATION ET TRACABILITÉ ---
+Objectif : Assurer la traçabilité des produits et lots
+Exigences :
+  - Chaque lot de production doit avoir une étiquette d'identification
+  - L'étiquette doit contenir : référence, date, numéro de lot
+  - La traçabilité doit être assurée de la réception à l'expédition
+  - Les lots non identifiés doivent être mis en quarantaine
+Non-conformité : Absence d'étiquette, étiquette illisible, lot non tracé
+Action corrective : Identifier immédiatement, mettre en place des contrôles
+
+--- P-06 : FORMATION ET COMPÉTENCES ---
+Objectif : S'assurer que le personnel est compétent
+Exigences :
+  - Chaque opérateur doit avoir un dossier de formation à jour
+  - Une formation doit être réalisée avant toute nouvelle tâche
+  - Les compétences doivent être évaluées annuellement
+  - Un plan de formation doit être établi chaque année
+Non-conformité : Absence de formation, dossier incomplet, compétence non évaluée
+Action corrective : Planifier la formation, mettre à jour les dossiers
+
+--- P-07 : MAINTENANCE DES ÉQUIPEMENTS ---
+Objectif : Assurer la disponibilité et la fiabilité des équipements
+Exigences :
+  - Un plan de maintenance préventive doit être établi
+  - Les interventions doivent être tracées dans un registre
+  - Les pannes doivent être analysées et traitées en priorité
+  - Les pièces de rechange critiques doivent être disponibles
+Non-conformité : Absence de plan de maintenance, registre non tenu
+Action corrective : Établir le plan, former les techniciens
+
+--- P-08 : DOCUMENTATION ET ARCHIVAGE ---
+Objectif : Maîtriser les documents qualité
+Exigences :
+  - Les documents doivent être approuvés avant diffusion
+  - Les versions obsolètes doivent être retirées
+  - L'archivage doit garantir l'intégrité des documents
+  - La durée de conservation doit être respectée
+Non-conformité : Document non approuvé, version obsolète en circulation
+Action corrective : Mettre à jour le document, former à la gestion documentaire
+
+--- P-09 : AUDITS INTERNES ---
+Objectif : Évaluer la conformité du SMQ
+Exigences :
+  - Un audit interne doit être réalisé au moins une fois par an
+  - Les auditeurs doivent être indépendants de la zone auditée
+  - Les non-conformités doivent être tracées et traitées
+  - Un rapport d'audit doit être diffusé à la direction
+Non-conformité : Absence d'audit, rapport non diffusé, non-conformités non traitées
+Action corrective : Planifier l'audit, former les auditeurs
+
+--- P-10 : RÉCLAMATIONS CLIENTS ---
+Objectif : Traiter les réclamations de manière efficace
+Exigences :
+  - Toute réclamation doit être enregistrée dans les 24h
+  - Une analyse des causes doit être réalisée sous 5 jours
+  - Une réponse doit être apportée au client sous 10 jours
+  - Les actions correctives doivent être suivies
+Non-conformité : Réclamation non traitée, absence de réponse client
+Action corrective : Traiter en urgence, mettre en place une procédure
+
+--- TABLEAU DE CORRESPONDANCE ISO 9001 ---
+P-01 (Équipements mesure) → ISO 7.1.5
+P-02 (Non-conformités) → ISO 10.2
+P-03 (Sécurité infrastructures) → ISO 7.1.3
+P-04 (Propreté) → ISO 7.1.4
+P-05 (Traçabilité) → ISO 8.5.2
+P-06 (Formation) → ISO 7.2
+P-07 (Maintenance) → ISO 7.1.3
+P-08 (Documentation) → ISO 7.5.3
+P-09 (Audits internes) → ISO 9.2
+P-10 (Réclamations clients) → ISO 8.2.1

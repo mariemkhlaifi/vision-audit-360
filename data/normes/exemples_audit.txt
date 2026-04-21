@@ -1,0 +1,91 @@
+==== EXEMPLES DE CONSTATS D'AUDIT QUALITÉ ===
+=== Référentiel : ISO 9001:2015 ===
+
+--- EXEMPLE 1 : Équipement de mesure ---
+Constat : Établi mal rangé + certificat de calibrage expiré
+Clause : 7.1.5 - Ressources de surveillance et de mesure
+Niveau de risque : Élevé
+Actions correctives :
+  - Rangement immédiat de l'établi
+  - Réaliser le calibrage des équipements
+  - Mettre en place un planning de rappel de calibrage
+
+--- EXEMPLE 2 : Traçabilité des lots ---
+Constat : Absence d'étiquette d'identification sur un lot de produits
+Clause : 8.5.2 - Identification et traçabilité
+Niveau de risque : Moyen
+Actions correctives :
+  - Identifier immédiatement le lot concerné
+  - Former le personnel aux procédures d'étiquetage
+  - Renforcer les contrôles en production
+
+--- EXEMPLE 3 : Armoire électrique ---
+Constat : Armoire électrique ouverte, câbles non étiquetés, poussière accumulée
+Clauses : 7.1.3 (Infrastructures), 7.1.4 (Environnement), 8.5.1 (Maîtrise production)
+Niveau de risque : Élevé
+Actions correctives :
+  - Fermer et verrouiller l'armoire
+  - Étiqueter tous les câbles
+  - Nettoyer l'atelier
+
+--- EXEMPLE 4 : Documentation manquante ---
+Constat : Registre des vérifications électriques non à jour depuis 3 mois
+Clause : 7.5.3 - Maîtrise des informations documentées
+Niveau de risque : Moyen
+Actions correctives :
+  - Mettre à jour immédiatement le registre
+  - Désigner un responsable de la tenue du registre
+  - Audit de suivi dans 15 jours
+
+--- EXEMPLE 5 : Formation du personnel ---
+Constat : Opérateur non formé aux nouvelles procédures qualité
+Clause : 7.2 - Compétences
+Niveau de risque : Élevé
+Actions correctives :
+  - Planifier une formation immédiate
+  - Évaluer les compétences après formation
+  - Mettre à jour le plan de formation annuel
+
+--- EXEMPLE 6 : Absence de signalétique ---
+Constat : Aucun panneau d'avertissement visible sur la ligne de production
+Clause : 7.1.3 - Infrastructures
+Niveau de risque : Moyen
+Actions correctives :
+  - Installer les panneaux réglementaires
+  - Audit de sécurité complémentaire
+
+--- EXEMPLE 7 : Maintenance des équipements ---
+Constat : Machine non entretenue, plan de maintenance inexistant
+Clause : 7.1.3 - Infrastructures
+Niveau de risque : Élevé
+Actions correctives :
+  - Établir un plan de maintenance préventive
+  - Réaliser une maintenance corrective immédiate
+  - Former les techniciens
+
+--- EXEMPLE 8 : Audits internes ---
+Constat : Absence d'audit interne depuis 18 mois
+Clause : 9.2 - Audit interne
+Niveau de risque : Élevé
+Actions correctives :
+  - Planifier un audit interne dans les 30 jours
+  - Former des auditeurs internes
+  - Établir un programme d'audit annuel
+
+--- EXEMPLE 9 : Non-conformité client ---
+Constat : Réclamation client non traitée depuis 2 mois
+Clause : 10.2 - Non-conformité et actions correctives
+Niveau de risque : Critique
+Actions correctives :
+  - Traiter la réclamation client en urgence
+  - Analyser la cause racine
+  - Mettre en œuvre une action corrective
+
+--- EXEMPLE 10 : Environnement de travail ---
+Constat : Atelier trop sombre, température inadaptée
+Clause : 7.1.4 - Environnement de travail
+Niveau de risque : Faible
+Actions correctives :
+  - Améliorer l'éclairage
+  - Vérifier le système de climatisation/chauffage
+  - Relevé des conditions ambiantes

@@ -1,0 +1,17 @@
+<<<<<<< HEAD
+reportlab
+faiss-cpu
+sentence-transformers
+langchain-community
+langchain-text-splitters
+mistralai
+python-dotenv
+streamlit
+=======
+streamlit
+chromadb
+sentence-transformers
+fpdf
+python-dotenv
+reportlab
+>>>>>>> 1f357b57ae8370a2cd4ee30fa1112f0ce7cf478c

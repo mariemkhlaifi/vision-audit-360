@@ -1,0 +1,96 @@
+=== ISO 9001:2015 - Exigences principales pour l'audit qualité ===
+
+=== 4. CONTEXTE DE L'ORGANISME ===
+4.1 Compréhension de l'organisme et de son contexte
+L'organisme doit déterminer les enjeux externes et internes pertinents pour sa stratégie.
+
+=== 5. LEADERSHIP ===
+5.1 Leadership et engagement
+La direction doit démontrer son engagement envers le système de management de la qualité.
+5.2 Politique qualité
+Une politique qualité doit être établie, communiquée et comprise par tous.
+5.3 Rôles, responsabilités et autorités
+Les rôles et responsabilités doivent être clairement définis et communiqués.
+
+=== 6. PLANIFICATION ===
+6.1 Actions pour faire face aux risques et opportunités
+L'organisme doit planifier les actions pour traiter les risques et opportunités.
+6.2 Objectifs qualité et planification
+Des objectifs qualité doivent être établis et communiqués.
+
+=== 7. SUPPORT ===
+7.1 Ressources
+7.1.2 Personnes
+L'organisme doit déterminer et fournir les personnes nécessaires au SMQ.
+7.1.3 Infrastructures
+L'organisme doit déterminer, fournir et maintenir les infrastructures nécessaires.
+🔴 Non-conformité : Armoire électrique non sécurisée, absence de signalétique
+7.1.4 Environnement de travail
+L'organisme doit déterminer et gérer l'environnement de travail nécessaire.
+🔴 Non-conformité : Propreté insuffisante, poussière accumulée
+7.2 Compétences
+L'organisme doit s'assurer que les personnes ont les compétences requises.
+🔴 Non-conformité : Formation insuffisante du personnel
+7.3 Sensibilisation
+Les personnes doivent être sensibilisées à la politique qualité.
+7.4 Communication
+L'organisme doit définir les communications internes et externes.
+7.5 Informations documentées
+7.5.3 Maîtrise des informations documentées
+Les documents doivent être maîtrisés, à jour et disponibles.
+🔴 Non-conformité : Registre des vérifications non à jour
+
+=== 8. RÉALISATION DES PRODUITS/SERVICES ===
+8.1 Planification et maîtrise opérationnelle
+L'organisme doit planifier et maîtriser la réalisation des produits.
+8.2 Exigences relatives aux produits et services
+8.2.1 Communication avec les clients
+Les exigences du client doivent être déterminées et revues.
+8.3 Conception et développement
+La conception doit être maîtrisée (si applicable).
+8.4 Maîtrise des processus, produits fournis par des externes
+Les fournisseurs externes doivent être évalués et surveillés.
+8.5 Production et prestation de services
+8.5.1 Maîtrise de la production et de la prestation de service
+La production doit être réalisée dans des conditions maîtrisées.
+🔴 Non-conformité : Câbles non étiquetés, absence de traçabilité
+8.5.2 Identification et traçabilité
+L'organisme doit identifier les produits et assurer leur traçabilité.
+🔴 Non-conformité : Absence d'identification des lots
+8.5.3 Propriété des clients
+Les biens des clients doivent être protégés.
+8.5.4 Préservation
+La conformité des produits doit être préservée pendant le processus.
+8.6 Libération des produits et services
+Les produits ne doivent pas être libérés sans vérification.
+8.7 Maîtrise des sorties non conformes
+Les non-conformités doivent être identifiées et traitées.
+
+=== 9. ÉVALUATION DE LA PERFORMANCE ===
+9.1 Surveillance, mesure, analyse et évaluation
+9.1.2 Analyse et évaluation
+Les données issues des audits doivent être analysées.
+9.2 Audit interne
+Des audits internes doivent être réalisés à intervalles planifiés.
+🔴 Non-conformité : Absence d'audits réguliers
+9.3 Revue de direction
+La direction doit revoir le SMQ à intervalles planifiés.
+
+=== 10. AMÉLIORATION ===
+10.1 Amélioration
+L'organisme doit déterminer et mettre en œuvre les opportunités d'amélioration.
+10.2 Non-conformité et actions correctives
+Lorsqu'une non-conformité est détectée, l'organisme doit réagir, évaluer les causes et mettre en œuvre des actions correctives.
+🔴 Non-conformité : Absence de traitement des écarts constatés
+10.3 Amélioration continue
+L'organisme doit améliorer en permanence la conformité du SMQ.
+
+=== RÈGLES MÉTIER POUR L'AUDIT ===
+RÈGLE Q-001 : Toute armoire électrique ouverte = non-conformité 7.1.3
+RÈGLE Q-002 : Câbles non étiquetés = non-conformité 8.5.1 et 8.5.2
+RÈGLE Q-003 : Poussière excessive = non-conformité 7.1.4
+RÈGLE Q-004 : Registre non à jour = non-conformité 7.5.3
+RÈGLE Q-005 : Absence panneau avertissement = non-conformité 7.1.3
+RÈGLE Q-006 : Personnel non formé = non-conformité 7.2
+RÈGLE Q-007 : Absence de traçabilité = non-conformité 8.5.2
+RÈGLE Q-008 : Document manquant = non-conformité 7.5.3
